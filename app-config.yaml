@@ -208,7 +208,7 @@ catalog:
         - allow: [User, Group]
         
     - type: url
-      target: https://github.com/RafaelCaldeiraAguiar/idp-app/blob/main/templates/crossplane-postgres/template.yaml
+      target: https://github.com/rafael-aguiar01/idp-app/blob/main/templates/crossplane-postgres/template.yaml
       rules:
         - allow: [Template]
     ## Uncomment these lines to add more example data
