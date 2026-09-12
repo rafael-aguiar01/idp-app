@@ -26,6 +26,7 @@ function createAzurePipelineAction() {
 
       output: {
         pipelineId: z => z.number(),
+        runId: z => z.number(),
       },
     },
 
@@ -67,7 +68,7 @@ function createAzurePipelineAction() {
 
         throw new Error(
           `Erro ao buscar repositório Azure DevOps: ` +
-            `${repositoryResponse.status} ${body}`,
+          `${repositoryResponse.status} ${body}`,
         );
       }
 
@@ -115,7 +116,7 @@ function createAzurePipelineAction() {
 
         throw new Error(
           `Erro ao criar Azure Pipeline: ` +
-            `${pipelineResponse.status} ${body}`,
+          `${pipelineResponse.status} ${body}`,
         );
       }
 
@@ -129,6 +130,56 @@ function createAzurePipelineAction() {
       );
 
       ctx.output('pipelineId', pipeline.id);
+
+      const runUrl =
+        `https://dev.azure.com/${encodeURIComponent(organization)}` +
+        `/${encodeURIComponent(project)}` +
+        `/_apis/pipelines/${pipeline.id}/runs?api-version=7.1`;
+
+      ctx.logger.info(
+        `Disparando primeira execução da pipeline ${pipeline.id}`,
+      );
+
+      const runResponse = await fetch(runUrl, {
+        method: 'POST',
+
+        headers: {
+          Authorization: `Basic ${authorization}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+
+        body: JSON.stringify({
+          resources: {
+            repositories: {
+              self: {
+                refName: 'refs/heads/main',
+              },
+            },
+          },
+        }),
+      });
+
+      if (!runResponse.ok) {
+        const body = await runResponse.text();
+
+        throw new Error(
+          `Pipeline criada, mas erro ao iniciar execução: ` +
+          `${runResponse.status} ${body}`,
+        );
+      }
+
+      const run = (await runResponse.json()) as {
+        id: number;
+        name: string;
+        state: string;
+      };
+
+      ctx.logger.info(
+        `Primeira execução iniciada: ${run.name} (${run.id}) - ${run.state}`,
+      );
+
+      ctx.output('runId', run.id);
     },
   });
 }
