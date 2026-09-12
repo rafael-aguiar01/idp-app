@@ -2,12 +2,16 @@ trigger:
   branches:
     include:
       - main
+  paths:
+    exclude:
+      - kubernetes/deployment.yaml
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
   - checkout: self
+    persistCredentials: true
 
   - task: NodeTool@0
     displayName: Setup Node.js
@@ -36,3 +40,20 @@ steps:
         -t acridplab.azurecr.io/${{ values.repoName }}:$(Build.SourceVersion) \
         .
     displayName: Build and push image
+  
+  - script: |
+      sed -i "s|image: acridplab.azurecr.io/${{ values.repoName }}:.*|image: acridplab.azurecr.io/${{ values.repoName }}:$(Build.SourceVersion)|" kubernetes/deployment.yaml
+
+      git config user.name "Azure Pipelines"
+      git config user.email "azure-pipelines@wh4sistemas.local"
+
+      git add kubernetes/deployment.yaml
+
+      if git diff --cached --quiet; then
+        echo "Nenhuma alteração no manifesto."
+        exit 0
+      fi
+
+      git commit -m "chore: update image to $(Build.SourceVersion)"
+      git push origin HEAD:main
+    displayName: Update Kubernetes manifest  
