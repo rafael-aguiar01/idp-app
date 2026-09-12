@@ -3,6 +3,11 @@ name: Build and Push Application Image
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'kubernetes/deployment.yaml'
+
+permissions:
+  contents: write
 
 jobs:
   build-and-push:
@@ -39,5 +44,23 @@ jobs:
           context: .
           platforms: linux/arm64
           push: true
-          tags: |
-            ${{ '${{ secrets.ACR_LOGIN_SERVER }}' }}/${{ values.repoName }}:${{ '${{ github.sha }}' }}
+          tags: ${{ '${{ secrets.ACR_LOGIN_SERVER }}' }}/${{ values.repoName }}:${{ '${{ github.sha }}' }}
+
+      - name: Atualizar imagem no manifesto Kubernetes
+        run: |
+          sed -i "s|image: acridplab.azurecr.io/${{ values.repoName }}:.*|image: acridplab.azurecr.io/${{ values.repoName }}:${{ '${{ github.sha }}' }}|" kubernetes/deployment.yaml
+
+      - name: Commitar nova versão da imagem
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add kubernetes/deployment.yaml
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração no manifesto."
+            exit 0
+          fi
+
+          git commit -m "chore: update image to ${{ '${{ github.sha }}' }}"
+          git push
