@@ -4,7 +4,8 @@ metadata:
   name: ${{ values.repoName }}
   description: ${{ values.description }}
   annotations:
-    github.com/project-slug: rafael-aguiar01/${{ values.repoName }}
+    dev.azure.com/project-repo: idp-lab/${{ values.repoName }}
+    dev.azure.com/host-org: dev.azure.com/wh4sistemas
 spec:
   type: service
   lifecycle: experimental
