@@ -2,22 +2,18 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: crossplane-postgres-template
-  title: Provisionar Banco de Dados (Crossplane)
-  description: Cria um banco de dados PostgreSQL utilizando Crossplane e GitOps (Argo CD).
+  title: Provisionar Banco PostgreSQL (Crossplane)
+  description: Solicita a criação de um banco via Crossplane no idp-gitops.
 spec:
   owner: platform-team
   type: infrastructure
-  
   parameters:
-    - title: Detalhes do Banco de Dados
-      required:
-        - dbName
+    - title: Detalhes do Banco
+      required: [dbName]
       properties:
         dbName:
           title: Nome do Banco
           type: string
-          description: Nome único para o seu banco de dados (ex. servico-pagamentos).
-          pattern: '^[a-z0-9-]+$'
 
   steps:
     - id: template
@@ -29,10 +25,10 @@ spec:
           dbName: ${{ parameters.dbName }}
 
     - id: publish-pr
-      name: Criando Pull Request no idp-gitops
+      name: Injetando no Repositório de Infraestrutura
       action: publish:github:pull-request
       input:
         repoUrl: github.com?repo=idp-gitops&owner=RafaelCaldeiraAguiar
         branchName: feature/db-${{ parameters.dbName }}
-        title: "infra: provisiona banco de dados ${{ parameters.dbName }}"
-        description: "PR gerado automaticamente pelo Backstage via Software Template."
+        title: "infra: provisiona banco ${{ parameters.dbName }}"
+        description: "PR automatizado. O ArgoCD provisionará o recurso após o merge."

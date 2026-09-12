@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.repoName }}
+  description: ${{ values.description }}
+  annotations:
+    github.com/project-slug: RafaelCaldeiraAguiar/${{ values.repoName }}
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team

@@ -211,6 +211,16 @@ catalog:
       target: https://github.com/rafael-aguiar01/idp-app/blob/main/templates/crossplane-postgres/template.yaml
       rules:
         - allow: [Template]
+
+    - type: url
+      target: https://github.com/rafael-aguiar01/synthetic-mesh-gitops/blob/main/templates/erp-module/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: url
+      target: https://github.com/rafael-aguiar01/idp-app/blob/main/templates/nodejs-app/template.yaml
+      rules:
+        - allow: [Template]    
     ## Uncomment these lines to add more example data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
