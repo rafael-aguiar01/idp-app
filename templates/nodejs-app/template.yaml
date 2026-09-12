@@ -1,33 +1,61 @@
-steps:
-  - id: template
-    name: Gerando Estrutura Node.js
-    action: fetch:template
-    input:
-      url: ./skeleton
-      values:
-        repoName: ${{ parameters.repoName }}
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+
+metadata:
+  name: nodejs-app-template
+  title: Criar Nova Aplicação Node.js
+  description: Cria um novo repositório com o boilerplate Node.js.
+
+spec:
+  owner: platform-team
+  type: service
+
+  parameters:
+    - title: Detalhes da Aplicação
+      required:
+        - repoName
+        - description
+
+      properties:
+        repoName:
+          title: Nome do Repositório
+          type: string
+
+        description:
+          title: Descrição
+          type: string
+          description: Descrição da aplicação
+
+  steps:
+    - id: template
+      name: Gerando Estrutura Node.js
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          repoName: ${{ parameters.repoName }}
+          description: ${{ parameters.description }}
+
+    - id: publish
+      name: Publicando Repositório no Azure DevOps
+      action: publish:azure
+      input:
         description: ${{ parameters.description }}
+        repoUrl: 'dev.azure.com?organization=wh4sistemas&project=idp-lab&repo=${{ parameters.repoName }}'
+        defaultBranch: main
 
-  - id: publish
-    name: Publicando Repositório no Azure DevOps
-    action: publish:azure
-    input:
-      description: ${{ parameters.description }}
-      repoUrl: 'dev.azure.com?organization=wh4sistemas&project=idp-lab&repo=${{ parameters.repoName }}'
-      defaultBranch: main
+    - id: pipeline
+      name: Criando Azure Pipeline
+      action: azure:pipeline:create
+      input:
+        organization: wh4sistemas
+        project: idp-lab
+        repository: ${{ parameters.repoName }}
+        yamlPath: /azure-pipelines.yml
 
-  - id: pipeline
-    name: Criando Azure Pipeline
-    action: azure:pipeline:create
-    input:
-      organization: wh4sistemas
-      project: idp-lab
-      repository: ${{ parameters.repoName }}
-      yamlPath: /azure-pipelines.yml
-
-  - id: register
-    name: Registrando no Catálogo
-    action: catalog:register
-    input:
-      repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-      catalogInfoPath: '/catalog-info.yaml'
+    - id: register
+      name: Registrando no Catálogo
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
