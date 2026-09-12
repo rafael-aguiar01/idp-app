@@ -25,12 +25,11 @@ spec:
           repoName: ${{ parameters.repoName }}
 
     - id: publish
-      name: Criando Repositório
+      name: Publicando Repositório no GitHub
       action: publish:github
       input:
-        allowedHosts: ['github.com']
-        description: 'Serviço Node.js ${{ parameters.repoName }}'
-        repoUrl: github.com?repo=${{ parameters.repoName }}&owner=RafaelCaldeiraAguiar
+        description: ${{ parameters.description }}
+        repoUrl: github.com?repo=${{ parameters.repoName }}&owner=rafael-aguiar01
 
     - id: register
       name: Registrando no Catálogo
