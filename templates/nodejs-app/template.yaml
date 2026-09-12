@@ -37,15 +37,12 @@ spec:
           description: ${{ parameters.description }}
 
     - id: publish
-      name: Publicando Repositório no GitHub
-      action: publish:github
+      name: Publicando Repositório no Azure DevOps
+      action: publish:azure
       input:
         description: ${{ parameters.description }}
-        repoUrl: 'github.com?repo=${{ parameters.repoName }}&owner=rafael-aguiar01'
-        secrets:
-          ACR_LOGIN_SERVER: ${{ environment.secrets.ACR_LOGIN_SERVER }}
-          ACR_USERNAME: ${{ environment.secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ environment.secrets.ACR_PASSWORD }}
+        repoUrl: 'dev.azure.com?organization=wh4sistemas&project=idp-lab&repo=${{ parameters.repoName }}'
+        defaultBranch: main
 
     - id: register
       name: Registrando no Catálogo
