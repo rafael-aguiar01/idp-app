@@ -43,6 +43,11 @@ spec:
         description: ${{ parameters.description }}
         repoUrl: github.com?repo=${{ parameters.repoName }}&owner=rafael-aguiar01
 
+    secrets:
+      ACR_LOGIN_SERVER: ${{ environment.secrets.ACR_LOGIN_SERVER }}
+      ACR_USERNAME: ${{ environment.secrets.ACR_USERNAME }}
+      ACR_PASSWORD: ${{ environment.secrets.ACR_PASSWORD }}
+
     - id: register
       name: Registrando no Catálogo
       action: catalog:register
