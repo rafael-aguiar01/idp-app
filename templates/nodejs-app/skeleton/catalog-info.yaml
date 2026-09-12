@@ -4,7 +4,7 @@ metadata:
   name: ${{ values.repoName }}
   description: ${{ values.description }}
   annotations:
-    github.com/project-slug: RafaelCaldeiraAguiar/${{ values.repoName }}
+    github.com/project-slug: rafael-aguiar01/${{ values.repoName }}
 spec:
   type: service
   lifecycle: experimental

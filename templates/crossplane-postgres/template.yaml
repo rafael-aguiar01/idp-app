@@ -28,7 +28,7 @@ spec:
       name: Injetando no Repositório de Infraestrutura
       action: publish:github:pull-request
       input:
-        repoUrl: github.com?repo=idp-gitops&owner=RafaelCaldeiraAguiar
+        repoUrl: github.com?repo=idp-gitops&owner=rafael-aguiar01
         branchName: feature/db-${{ parameters.dbName }}
         title: "infra: provisiona banco ${{ parameters.dbName }}"
         description: "PR automatizado. O ArgoCD provisionará o recurso após o merge."
