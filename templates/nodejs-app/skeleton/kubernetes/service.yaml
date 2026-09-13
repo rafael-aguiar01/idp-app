@@ -2,16 +2,16 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: ${{ values.repoName }}
-    labels:
-    app: ${{ values.repoName }}
-    backstage.io/kubernetes-id: ${{ values.repoName }}
+  name: '${{ values.repoName }}'
+  labels:
+    app: '${{ values.repoName }}'
+    backstage.io/kubernetes-id: '${{ values.repoName }}'
 
 spec:
   type: ClusterIP
 
   selector:
-    app: ${{ values.repoName }}
+    app: '${{ values.repoName }}'
 
   ports:
     - name: http
