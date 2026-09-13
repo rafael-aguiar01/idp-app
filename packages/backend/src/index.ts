@@ -22,6 +22,7 @@ backend.add(
 backend.add(import('@backstage/plugin-scaffolder-backend-module-azure'));
 backend.add(import('./modules/azurePipeline'));
 
+backend.add(import('@backstage-community/plugin-argocd-backend'));
 
 // techdocs plugin
 backend.add(import('@backstage/plugin-techdocs-backend'));
