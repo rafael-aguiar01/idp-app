@@ -83,3 +83,11 @@ kubernetes:
           url: https://kubernetes.default.svc
           authProvider: serviceAccount
           skipTLSVerify: false
+
+argocd:
+  appLocatorMethods:
+    - type: config
+      instances:
+        - name: aks-idp-hub
+          url: https://argocd-server.argocd.svc.cluster.local
+          token: ${ARGOCD_AUTH_TOKEN}
