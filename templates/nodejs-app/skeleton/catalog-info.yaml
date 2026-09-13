@@ -1,14 +1,22 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
+
 metadata:
   name: ${{ values.repoName }}
   description: ${{ values.description }}
+
   annotations:
     dev.azure.com/project-repo: idp-lab/${{ values.repoName }}
     dev.azure.com/host-org: dev.azure.com/wh4sistemas
 
     backstage.io/kubernetes-id: ${{ values.repoName }}
     backstage.io/kubernetes-namespace: ${{ values.repoName }}
+
+    argocd/app-name: ${{ values.repoName }}
+    argocd/instance-name: aks-idp-hub
+    argocd/app-namespace: argocd
+    argocd/project-name: default
+
 spec:
   type: service
   lifecycle: experimental
