@@ -71,3 +71,15 @@ integrations:
         - organizations:
             - wh4sistemas
           personalAccessToken: ${AZURE_DEVOPS_TOKEN}
+          
+kubernetes:
+  serviceLocatorMethod:
+    type: multiTenant
+
+  clusterLocatorMethods:
+    - type: config
+      clusters:
+        - name: aks-idp-hub
+          url: https://kubernetes.default.svc
+          authProvider: serviceAccount
+          skipTLSVerify: false
