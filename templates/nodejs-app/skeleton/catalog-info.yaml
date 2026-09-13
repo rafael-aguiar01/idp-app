@@ -6,6 +6,9 @@ metadata:
   annotations:
     dev.azure.com/project-repo: idp-lab/${{ values.repoName }}
     dev.azure.com/host-org: dev.azure.com/wh4sistemas
+
+    backstage.io/kubernetes-id: ${{ values.repoName }}
+    backstage.io/kubernetes-namespace: ${{ values.repoName }}
 spec:
   type: service
   lifecycle: experimental
