@@ -27,6 +27,7 @@ spec:
           description: Descrição da aplicação
 
     - title: Banco de Dados
+
       properties:
         createPostgres:
           title: Criar PostgreSQL
@@ -39,6 +40,7 @@ spec:
             properties:
               createPostgres:
                 const: true
+
           then:
             properties:
               databaseSize:
@@ -92,6 +94,7 @@ spec:
               - databaseStorageGB
               - databaseVersion
               - databaseName
+
   steps:
     - id: template
       name: Gerando Estrutura Node.js
@@ -102,15 +105,11 @@ spec:
           repoName: ${{ parameters.repoName }}
           description: ${{ parameters.description }}
 
-            createPostgres: ${{ parameters.createPostgres }}
-
-            databaseSize: ${{ parameters.databaseSize if parameters.createPostgres else 'small' }}
-
-            databaseStorageGB: ${{ parameters.databaseStorageGB if parameters.createPostgres else 32 }}
-
-            databaseVersion: ${{ parameters.databaseVersion if parameters.createPostgres else '16' }}
-
-            databaseName: ${{ parameters.databaseName if parameters.createPostgres else 'app' }}
+          createPostgres: ${{ parameters.createPostgres }}
+          databaseSize: ${{ parameters.databaseSize }}
+          databaseStorageGB: ${{ parameters.databaseStorageGB }}
+          databaseVersion: ${{ parameters.databaseVersion }}
+          databaseName: ${{ parameters.databaseName }}
 
     - id: publish
       name: Publicando Repositório no Azure DevOps
