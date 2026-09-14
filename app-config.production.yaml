@@ -76,6 +76,11 @@ kubernetes:
   serviceLocatorMethod:
     type: multiTenant
 
+  customResources:
+    - group: platform.idp.local
+      apiVersion: v1alpha1
+      plural: postgresqlinstances
+
   clusterLocatorMethods:
     - type: config
       clusters:

@@ -5,6 +5,8 @@ kind: PostgreSQLInstance
 metadata:
   name: '${{ values.repoName }}-db'
   namespace: '${{ values.repoName }}'
+  labels:
+    backstage.io/kubernetes-id: '${{ values.repoName }}'
 
 spec:
   parameters:
