@@ -1,0 +1,17 @@
+{% if values.createPostgres %}
+apiVersion: platform.idp.local/v1alpha1
+kind: PostgreSQLInstance
+
+metadata:
+  name: '${{ values.repoName }}-db'
+  namespace: '${{ values.repoName }}'
+
+spec:
+  parameters:
+    size: '${{ values.databaseSize }}'
+    storageGB: ${{ values.databaseStorageGB }}
+    version: '${{ values.databaseVersion }}'
+    databaseName: '${{ values.databaseName }}'
+{% else %}
+# PostgreSQL não solicitado para esta aplicação.
+{% endif %}

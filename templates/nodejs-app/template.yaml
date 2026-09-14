@@ -26,6 +26,72 @@ spec:
           type: string
           description: Descrição da aplicação
 
+    - title: Banco de Dados
+      properties:
+        createPostgres:
+          title: Criar PostgreSQL
+          type: boolean
+          description: Provisiona um Azure Database for PostgreSQL para esta aplicação.
+          default: false
+
+      allOf:
+        - if:
+            properties:
+              createPostgres:
+                const: true
+          then:
+            properties:
+              databaseSize:
+                title: Tamanho
+                type: string
+                default: small
+                enum:
+                  - small
+                  - medium
+                  - large
+                enumNames:
+                  - Small
+                  - Medium
+                  - Large
+
+              databaseStorageGB:
+                title: Storage
+                type: integer
+                default: 32
+                enum:
+                  - 32
+                  - 64
+                  - 128
+                  - 256
+                  - 512
+                enumNames:
+                  - 32 GB
+                  - 64 GB
+                  - 128 GB
+                  - 256 GB
+                  - 512 GB
+
+              databaseVersion:
+                title: PostgreSQL
+                type: string
+                default: "16"
+                enum:
+                  - "14"
+                  - "15"
+                  - "16"
+
+              databaseName:
+                title: Nome do Database
+                type: string
+                default: app
+                pattern: '^[a-z][a-z0-9_]*$'
+                description: Nome lógico do banco criado dentro do PostgreSQL.
+
+            required:
+              - databaseSize
+              - databaseStorageGB
+              - databaseVersion
+              - databaseName
   steps:
     - id: template
       name: Gerando Estrutura Node.js
@@ -35,6 +101,16 @@ spec:
         values:
           repoName: ${{ parameters.repoName }}
           description: ${{ parameters.description }}
+
+            createPostgres: ${{ parameters.createPostgres }}
+
+            databaseSize: ${{ parameters.databaseSize if parameters.createPostgres else 'small' }}
+
+            databaseStorageGB: ${{ parameters.databaseStorageGB if parameters.createPostgres else 32 }}
+
+            databaseVersion: ${{ parameters.databaseVersion if parameters.createPostgres else '16' }}
+
+            databaseName: ${{ parameters.databaseName if parameters.createPostgres else 'app' }}
 
     - id: publish
       name: Publicando Repositório no Azure DevOps
